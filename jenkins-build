@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+    stages {
+        stage('Example') {
+            steps {
+                // groovy 脚本
+                sh '''  
+                cd /jenkins 
+                echo 'hello jenkins' > ./a.sh  
+                '''  
+                echo 'Hello World'
+            }
+        }
+        stage('push_nexus'){
+            steps {
+                sh '''
+                for i in "/jenkins"/*.tar;do
+                  curl -u admin:admin -T ${i} http://172.20.28.163:8081/repository/software/aaa/
+                done
+                '''
+                sh """
+                echo "执行成功"
+                """
+            }
+        }
+    }
+}
